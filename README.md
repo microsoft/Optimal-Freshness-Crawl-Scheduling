@@ -7,6 +7,8 @@ When using the dataset in other works, please cite the article above.
 
 We thank Microsoft Bing for help in collecting this data. For any questions regarding the dataset, please contact Andrey Kolobov (akolobov@microsoft.com, https://www.microsoft.com/en-us/research/people/akolobov/).
 
+[The Dataset can be downloaded here](https://msmarco.blob.core.windows.net/crawling/PoliteCrawling.gz)
+
 # Data Collection Details
 The dataset was gathered by crawling a large collection of URLs for approximately 14 weeks in 2017 using Microsoft Bing's production web crawler, and upon every crawl recording whether the corresponding web page has changed since its previous crawl. These URLs were used as sources of structured information, e.g., event times, for Microsoft's Satori knowledge base. For this purpose, information of interest was extracted from page content using templates. Accordingly, we considered a URL as changed across two crawls if and only if:
 
