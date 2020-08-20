@@ -1,8 +1,12 @@
 ## Introduction
-This archive contains the dataset, different parts of which were used in the empirical evaluation for the following papers:
+This repository contains the dataset, different parts of which were used in the empirical evaluation for the following papers:
 
 	[1] A. Kolobov, E. Lubetzky, Y. Peres, E. Horvitz, "Optimal Freshness Crawl Under Politeness Constraints", SIGIR-2019.
 	[2] A. Kolobov, Y. Peres, C. Lu, E. Horvitz, "Staying up to Date with Online Content Changes Using Reinforcement Learning for Scheduling", NeurIPS-2019. 
+
+It also contains code for reproducing the experiments from [2] as well as from the following paper, which doesn't use the dataset:
+
+	[3] A. Kolobov, S. Bubeck, J. Zimmert, "Online Learning for Active Cache Synchronization", ICML-2020.
 
 When using the dataset in other works, please cite [1] if you mainly experiment with its data on host constraints, and [2] if you mainly focus on the rest of the dataset.
 
@@ -90,6 +94,24 @@ Doing so should generate files `imps_and_chrates_incompl.txt` and `imps_and_chra
 	> Experiment1()
 	> Experiment2()
 	> Experiment3()
+
+## Instructions for reproducing the ICML-2020 paper's experiments
+These instructions assume that you have launched Python 3 of higher from a directory containing [sync_bandits.py](https://github.com/microsoft/Optimal-Freshness-Crawl-Scheduling/blob/master/sync_bandits.py).
+
+First, load sync_bandits.py:
+
+	> from sync_bandits import *
+
+You may need to install some dependencies such as numpy and scipy if they are missing.
+
+The results in Figures 1 and 2 in the main text and Figures 3 and 4 in the Appendix can be reproduced by running
+
+	> exp1()
+	> exp2()
+	> exp1a()
+	> exp2a() 
+
+respectively. 
 
 ## Contributing
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
