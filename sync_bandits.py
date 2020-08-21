@@ -3,7 +3,7 @@ This file contains code for running all experiments in the paper
 
 A. Kolobov, S. Bubeck, J. Zimmert. "Online Learning for Active Cache Synchronization." ICML-2020.
 
-To reproduce the experiments in Figres 1 and 2 in the main text and Figures 3 and 4 in the Appendix,
+To reproduce the experiments in Figures 1 and 2 in the main text and Figures 3 and 4 in the Appendix,
 run exp1(), exp2(), exp1a(), and exp2a() from this file, respectively. See the comments for these
 methods for more details.
 
@@ -134,10 +134,10 @@ class CostGen(ABC):
 	Returns
 	-------
 	est_grad_J : array of floats
-		An array representing the ***unnormalized*** gradient
+		An array representing the gradient. Value of 0 indicates that this dimension hasn't been reestimated
 	arms_with_new_grad : array of ints
 		An array of arm indices whose partial derivatives got estimated in this function call. 
-		All other arms' gradient estimates should be ignored.
+		All other arms' partial derivative estimates are 0 and should be ignored.
 	"""
 	def estimate_grad_J(self, r, arms_latest_play_times, epoch_start_time, epoch_len, epsilon):
 		est_grad_J = np.zeros_like(r)
@@ -159,7 +159,7 @@ class CostGen(ABC):
 			else:
 				est_grad_J[k] = 0
 			
-		return est_grad_J, arms_with_new_grad
+		return est_grad_J / len(arms_with_new_grad), arms_with_new_grad
 		
 
 def sigmoid(x):
@@ -341,7 +341,6 @@ def mirror_sync(c, num_arms = 100, learning_rate = 0.05, num_rounds = 50, epsilo
 	for i in range(num_rounds):
 		est_grad_J, arms_with_new_grads = c.estimate_grad_J(r, np.zeros_like(r), 0, 1 / rmin, epsilon)
 		assert num_arms == len(arms_with_new_grads), "In MirrorSync, every arm must get a new gradient estimate in every round! Num arms: %r, num arms with new gradient estimates: %r" % (len(arms), len(arms_temp))
-		est_grad_J = est_grad_J / num_arms
 		r = mirror_descent_breg_step(r, est_grad_J, range(num_arms), learning_rate, rmin, rmax, B)
 		J = c.J(r)
 		results[i + 1] = J
@@ -408,9 +407,8 @@ def async_mirror_sync(c, alg, num_arms = 100, learning_rate = 0.05, num_rounds =
 	For ease of comparison to MirrorSync's performance, we assume that (1 / rmin) is a multiple of update_cycle_length.
 	"""
 	results = np.zeros((num_rounds * math.ceil((1 / rmin) / update_cycle_length) + 1,))
-	est_grad_J = np.zeros((num_arms,))
 	r = np.zeros((num_arms,))
-	r = mirror_descent_step(r, est_grad_J / num_arms, learning_rate, rmin, rmax, B)
+	r = mirror_descent_step(r, np.zeros((num_arms,)) / num_arms, learning_rate, rmin, rmax, B)
 	J = c.J(r)
 	if not silent:
 		print('Current J value: %r'%(J))
@@ -433,9 +431,6 @@ def async_mirror_sync(c, alg, num_arms = 100, learning_rate = 0.05, num_rounds =
 		B_current_update = sum(r[arms_with_new_grad])
 		
 		if (len(arms_with_new_grad) > 0):
-			est_grad_J_local = est_grad_J_local / len(arms_with_new_grad)
-			est_grad_J += est_grad_J_local
-			
 			r_new = np.zeros_like(r)
 
 			# AsyncMirrorSync and AsyncPSGDSync differ only in the algorithm they use to update the play rates (mirror descent for the former, projected SGD for the latter.)
