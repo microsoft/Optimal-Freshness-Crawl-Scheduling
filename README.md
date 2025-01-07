@@ -12,7 +12,7 @@ When using the dataset in other works, please cite [1] if you mainly experiment 
 
 We thank Microsoft Bing for help in collecting this data. For any questions regarding the dataset, please contact Andrey Kolobov (akolobov@microsoft.com, https://www.microsoft.com/en-us/research/people/akolobov/).
 
-[The Dataset can be downloaded here](https://msmarco.blob.core.windows.net/crawling/PoliteCrawling.gz)
+[The Dataset can be downloaded here](https://msmarco.z22.web.core.windows.net/crawling/PoliteCrawling.gz)
 
 
 ## Data Collection Details
